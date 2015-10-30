@@ -1,0 +1,44 @@
+{
+  "name": "move-property",
+  "description": "Move a property from one object to another. ",
+  "version": "0.1.0",
+  "homepage": "https://github.com/jonschlinkert/move-property",
+  "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+  "repository": "jonschlinkert/move-property",
+  "bugs": {
+    "url": "https://github.com/jonschlinkert/move-property/issues"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "utils.js"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "dependencies": {
+    "get-value": "^2.0.0",
+    "isobject": "^2.0.0",
+    "lazy-cache": "^0.2.4",
+    "set-value": "^0.3.0",
+    "unset-value": "^0.1.1"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*"
+  },
+  "verb": {
+    "related": {
+      "description": "",
+      "list": [
+        "get-value",
+        "set-value",
+        "unset-value"
+      ]
+    }
+  }
+}
