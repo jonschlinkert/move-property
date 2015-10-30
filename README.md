@@ -14,7 +14,13 @@ $ npm i move-property --save
 
 ```js
 var move = require('move-property');
+```
 
+**Examples**
+
+Move a property:
+
+```js
 var one = {a: 'b'};
 var two = {};
 move(one, two, 'a');
@@ -23,6 +29,19 @@ console.log(one);
 //=> {}
 console.log(two)
 //=> {a: 'b'}
+```
+
+Move a nested property:
+
+```js
+var one = {a: {b: 'c'}};
+var two = {};
+move(one, two, 'a.b');
+
+console.log(one);
+//=> {a: {}}
+console.log(two);
+//=> {a: {b: 'c'}}
 ```
 
 ## Related projects
