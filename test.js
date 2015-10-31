@@ -92,7 +92,9 @@ describe('moveProp', function () {
 describe('moveEach', function () {
   it('should move each property in the given object:', function () {
     var obj = {one: {two: {path: 'a/b.js', src: 'a.js', dest: 'actual'}}, file: {}};
-    var actual = move.each(obj)(['path', 'src', 'dest'], 'one.two', 'file');
+    var fn = move.each(obj)
+    fn(['path', 'src', 'dest'], 'one.two', 'file');
+
     assert(!obj.one.two.path);
     assert(!obj.one.two.src);
     assert(!obj.one.two.dest);
@@ -102,42 +104,52 @@ describe('moveEach', function () {
   });
 
   it('should move properties', function () {
-    var a = {path: 'a/b.js', src: 'a.js', dest: 'actual'};
-    var b = {};
+    var a = {};
+    var b = {path: 'a/b.js', src: 'a.js', dest: 'actual'};
     var fn = move.each(a, b);
 
     fn(['path', 'dest']);
 
-    assert(!a.path);
-    assert(!a.dest);
-    assert(b.path === 'a/b.js');
-    assert(b.dest === 'actual');
+    assert(!b.path);
+    assert(!b.dest);
+    assert(a.path === 'a/b.js');
+    assert(a.dest === 'actual');
   });
 
   it('should move properties from a nested object', function () {
-    var a = {one: {two: {path: 'a/b.js', src: 'a.js', dest: 'actual'}}};
-    var b = {};
+    var a = {};
+    var b = {one: {two: {path: 'a/b.js', src: 'a.js', dest: 'actual'}}};
     var fn = move.each(a, b);
 
     fn(['path', 'dest'], 'one.two');
 
-    assert(!a.one.two.path);
-    assert(!a.one.two.dest);
-    assert(b.path === 'a/b.js');
-    assert(b.dest === 'actual');
+    assert(!b.one.two.path);
+    assert(!b.one.two.dest);
+    assert(a.path === 'a/b.js');
+    assert(a.dest === 'actual');
   });
 
   it('should move from nested properties to nested properties', function () {
-    var a = {one: {two: {path: 'a/b.js', src: 'a.js', dest: 'actual'}}};
-    var b = {};
+    var a = {};
+    var b = {one: {two: {path: 'a/b.js', src: 'a.js', dest: 'actual'}}};
     var fn = move.each(a, b);
 
     fn(['path', 'dest'], 'one.two', 'file');
 
-    assert(!a.one.two.path);
-    assert(!a.one.two.dest);
-    assert(b.file.path === 'a/b.js');
-    assert(b.file.dest === 'actual');
+    assert(!b.one.two.path);
+    assert(!b.one.two.dest);
+    assert(a.file.path === 'a/b.js');
+    assert(a.file.dest === 'actual');
+  });
+
+  it('should move properties from multiple objects', function () {
+    var obj = {};
+    var fn = move.each(obj, {a: 'aaa'}, {a: 'ccc'}, {b: 'ddd'});
+
+    fn(['a', 'b']);
+
+    assert(obj.a === 'ccc');
+    assert(obj.b === 'ddd');
   });
 
   it('should throw an error when first arg is invalid:', function (cb) {
