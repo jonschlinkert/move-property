@@ -1,7 +1,7 @@
 {
   "name": "move-property",
   "description": "Move a property from one object to another.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "homepage": "https://github.com/jonschlinkert/move-property",
   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
   "repository": "jonschlinkert/move-property",
