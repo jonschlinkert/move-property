@@ -92,14 +92,52 @@ describe('moveProp', function () {
 describe('moveEach', function () {
   it('should move each property in the given object:', function () {
     var obj = {one: {two: {path: 'a/b.js', src: 'a.js', dest: 'actual'}}, file: {}};
-    var actual = move.each(obj, ['path', 'src', 'dest'], 'one.two', 'file');
-
+    var actual = move.each(obj)(['path', 'src', 'dest'], 'one.two', 'file');
     assert(!obj.one.two.path);
     assert(!obj.one.two.src);
     assert(!obj.one.two.dest);
     assert(obj.file.path === 'a/b.js');
     assert(obj.file.src === 'a.js');
     assert(obj.file.dest === 'actual');
+  });
+
+  it('should move properties', function () {
+    var a = {path: 'a/b.js', src: 'a.js', dest: 'actual'};
+    var b = {};
+    var fn = move.each(a, b);
+
+    fn(['path', 'dest']);
+
+    assert(!a.path);
+    assert(!a.dest);
+    assert(b.path === 'a/b.js');
+    assert(b.dest === 'actual');
+  });
+
+  it('should move properties from a nested object', function () {
+    var a = {one: {two: {path: 'a/b.js', src: 'a.js', dest: 'actual'}}};
+    var b = {};
+    var fn = move.each(a, b);
+
+    fn(['path', 'dest'], 'one.two');
+
+    assert(!a.one.two.path);
+    assert(!a.one.two.dest);
+    assert(b.path === 'a/b.js');
+    assert(b.dest === 'actual');
+  });
+
+  it('should move from nested properties to nested properties', function () {
+    var a = {one: {two: {path: 'a/b.js', src: 'a.js', dest: 'actual'}}};
+    var b = {};
+    var fn = move.each(a, b);
+
+    fn(['path', 'dest'], 'one.two', 'file');
+
+    assert(!a.one.two.path);
+    assert(!a.one.two.dest);
+    assert(b.file.path === 'a/b.js');
+    assert(b.file.dest === 'actual');
   });
 
   it('should throw an error when first arg is invalid:', function (cb) {
@@ -109,7 +147,7 @@ describe('moveEach', function () {
     } catch(err) {
       assert(err);
       assert(err.message);
-      assert(err.message === 'expected target to be an object');
+      assert(err.message === 'expected first argument to be an object');
       cb();
     }
   });

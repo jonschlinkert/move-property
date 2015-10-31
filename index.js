@@ -51,16 +51,23 @@ module.exports.prop = function moveProp(target, a, b) {
   return target;
 };
 
-module.exports.each = function moveEach(target, keys, a, b) {
-  if (!utils.isObject(target)) {
-    throw new Error('expected target to be an object');
+module.exports.each = function (provider, receiver) {
+  if (!utils.isObject(provider)) {
+    throw new Error('expected first argument to be an object');
   }
-  keys.forEach(function (key) {
-    var val = utils.get(target, a + '.' + key);
-    if (typeof val !== 'undefined') {
-      utils.set(target, b + '.' + key, val);
-      utils.del(target, a + '.' + key);
-    }
-  });
-  return target;
+  if (!utils.isObject(receiver)) {
+    receiver = provider;
+  }
+
+  return function (keys, a, b) {
+    keys.forEach(function (key) {
+      var val = utils.get(provider, (a ? a + '.' : '') + key);
+      if (typeof val !== 'undefined') {
+        utils.set(receiver, (b ? b + '.' : '') + key, val);
+        utils.del(provider, (a ? a + '.' : '') + key);
+      }
+    });
+
+    return receiver;
+  };
 };
