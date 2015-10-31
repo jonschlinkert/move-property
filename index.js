@@ -25,7 +25,12 @@ module.exports = function move(a, b, prop, key) {
   if (!utils.isObject(b)) {
     throw new Error('expected second argument to be an object');
   }
+
   var val = utils.get(a, prop);
+  if (typeof val === 'undefined') {
+    return b;
+  }
+
   utils.set(b, key || prop, val);
   utils.del(a, prop);
   return b;
@@ -35,7 +40,12 @@ module.exports.prop = function moveProp(target, a, b) {
   if (!utils.isObject(target)) {
     throw new Error('expected target to be an object');
   }
+
   var val = utils.get(target, a);
+  if (typeof val === 'undefined') {
+    return b;
+  }
+
   utils.set(target, b, val);
   utils.del(target, a);
   return target;
@@ -47,8 +57,10 @@ module.exports.each = function moveEach(target, keys, a, b) {
   }
   keys.forEach(function (key) {
     var val = utils.get(target, a + '.' + key);
-    utils.set(target, b + '.' + key, val);
-    utils.del(target, a + '.' + key);
+    if (typeof val !== 'undefined') {
+      utils.set(target, b + '.' + key, val);
+      utils.del(target, a + '.' + key);
+    }
   });
   return target;
 };

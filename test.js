@@ -21,6 +21,13 @@ describe('move', function () {
     assert(actual.a === 'b');
   });
 
+  it('should ignore properties that do not exist:', function () {
+    var one = {a: 'b'};
+    var two = {};
+    var res = move(one, two, 'foo');
+    assert.deepEqual(two, res);
+  });
+
   it('should move a nested property:', function () {
     var one = {a: {b: 'c'}};
     var two = {};
